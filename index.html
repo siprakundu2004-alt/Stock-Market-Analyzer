@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Stock Market Analyzer | MCA Project</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- ================= BACKGROUND EFFECT ================= -->
+
+    <div class="background-grid"></div>
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="header">
+
+        <div class="logo">
+            <span class="logo-icon">↗</span>
+            <span>Stock<span class="logo-highlight">Analyzer</span></span>
+        </div>
+
+        <nav>
+            <a href="#dashboard">Dashboard</a>
+            <a href="#market-flow">Market Flow</a>
+            <a href="#watchlist">Watchlist</a>
+            <a href="#about">About</a>
+        </nav>
+
+        <div class="market-status">
+            <span class="status-dot"></span>
+            LIVE MARKET
+        </div>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main>
+
+        <section id="dashboard" class="dashboard">
+
+
+            <!-- ================= HERO ================= -->
+
+            <section class="hero">
+
+                <div class="hero-badge">
+                    <span>●</span>
+                    REAL-TIME MARKET ANALYTICS
+                </div>
+
+                <h1>
+                    Understand the
+                    <span>Market.</span>
+                    <br>
+                    Analyze the Future.
+                </h1>
+
+                <p>
+                    A powerful frontend stock market analyzer
+                    that fetches real-time financial data,
+                    visualizes historical prices and helps
+                    manage your personal watchlist.
+                </p>
+
+                <div class="hero-stats">
+
+                    <div>
+                        <strong>LIVE</strong>
+                        <small>Market Data</small>
+                    </div>
+
+                    <div>
+                        <strong>24/7</strong>
+                        <small>Analysis</small>
+                    </div>
+
+                    <div>
+                        <strong>100%</strong>
+                        <small>Frontend</small>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= SEARCH ================= -->
+
+            <section class="search-panel">
+
+                <div class="search-heading">
+
+                    <div>
+                        <span class="section-label">
+                            MARKET SEARCH
+                        </span>
+
+                        <h2>
+                            Find a Stock
+                        </h2>
+                    </div>
+
+                    <div class="api-badge">
+    ALPHA VANTAGE API
+</div>
+
+
+                </div>
+
+                <div class="search-box">
+
+                    <div class="search-input-wrapper">
+
+                        <span class="search-icon">⌕</span>
+
+                        <input
+                            type="text"
+                            id="stockInput"
+                            placeholder="Enter stock symbol e.g. AAPL"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+                    <button id="searchBtn">
+
+                        <span>Analyze Stock</span>
+
+                        <span class="button-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+                </div>
+
+                <div class="popular-stocks">
+
+                    <span>Popular:</span>
+
+                    <button onclick="quickSearch('AAPL')">
+                        AAPL
+                    </button>
+
+                    <button onclick="quickSearch('MSFT')">
+                        MSFT
+                    </button>
+
+                    <button onclick="quickSearch('GOOGL')">
+                        GOOGL
+                    </button>
+
+                    <button onclick="quickSearch('TSLA')">
+                        TSLA
+                    </button>
+
+                    <button onclick="quickSearch('AMZN')">
+                        AMZN
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- ERROR -->
+
+            <p id="errorMessage"></p>
+
+
+            <!-- LOADING -->
+
+            <div id="loading">
+
+                <div class="loader"></div>
+
+                <span>
+                    Fetching market data...
+                </span>
+
+            </div>
+
+
+            <!-- ================= STOCK DETAILS ================= -->
+
+            <section id="stockDetails" class="hidden">
+
+
+                <!-- Stock Header -->
+
+                <div class="stock-title premium-panel">
+
+                    <div class="stock-identity">
+
+                        <div class="stock-avatar">
+                            $
+                        </div>
+
+                        <div>
+
+                            <span class="section-label">
+                                STOCK ANALYSIS
+                            </span>
+
+                            <h2 id="companyName">
+                                -
+                            </h2>
+
+                            <p id="stockSymbol">
+                                -
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        id="watchlistBtn"
+                        class="watch-btn">
+
+                        ⭐ Add to Watchlist
+
+                    </button>
+
+                </div>
+
+
+                <!-- ================= STOCK CARDS ================= -->
+
+                <div class="stock-cards">
+
+
+                    <div class="card price-card">
+
+                        <div class="card-top">
+
+                            <span>Current Price</span>
+
+                            <span class="card-icon">
+                                $
+                            </span>
+
+                        </div>
+
+                        <p id="currentPrice">
+                            -
+                        </p>
+
+                        <small>
+                            Live market value
+                        </small>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-top">
+
+                            <span>Change</span>
+
+                            <span class="card-icon">
+                                ↗
+                            </span>
+
+                        </div>
+
+                        <p id="priceChange">
+                            -
+                        </p>
+
+                        <small>
+                            Today's movement
+                        </small>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-top">
+
+                            <span>Open</span>
+
+                            <span class="card-icon">
+                                ◷
+                            </span>
+
+                        </div>
+
+                        <p id="openPrice">
+                            -
+                        </p>
+
+                        <small>
+                            Opening price
+                        </small>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-top">
+
+                            <span>High</span>
+
+                            <span class="card-icon">
+                                ↑
+                            </span>
+
+                        </div>
+
+                        <p id="highPrice">
+                            -
+                        </p>
+
+                        <small>
+                            Day high
+                        </small>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-top">
+
+                            <span>Low</span>
+
+                            <span class="card-icon">
+                                ↓
+                            </span>
+
+                        </div>
+
+                        <p id="lowPrice">
+                            -
+                        </p>
+
+                        <small>
+                            Day low
+                        </small>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-top">
+
+                            <span>Previous Close</span>
+
+                            <span class="card-icon">
+                                ◈
+                            </span>
+
+                        </div>
+
+                        <p id="previousClose">
+                            -
+                        </p>
+
+                        <small>
+                            Previous session
+                        </small>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-top">
+
+                            <span>Volume</span>
+
+                            <span class="card-icon">
+                                ▥
+                            </span>
+
+                        </div>
+
+                        <p id="volume">
+                            -
+                        </p>
+
+                        <small>
+                            Trading volume
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= CHART ================= -->
+
+                <div class="chart-box premium-panel">
+
+                    <div class="chart-heading">
+
+                        <div>
+
+                            <span class="section-label">
+                                PRICE HISTORY
+                            </span>
+
+                            <h2>
+                                Historical Price Chart
+                            </h2>
+
+                        </div>
+
+                        <div class="chart-live">
+                            ● LIVE
+                        </div>
+
+                    </div>
+
+                    <div class="chart-container">
+
+                        <div class="chart-wrapper">
+    <canvas id="stockChart"></canvas>
+</div>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- STOCK MARKET FLOWCHART -->
+            <!-- ================================================= -->
+
+            <section
+                id="market-flow"
+                class="flow-section">
+
+                <div class="section-header">
+
+                    <span class="section-label">
+                        HOW IT WORKS
+                    </span>
+
+                    <h2>
+                        Stock Market Analysis Flow
+                    </h2>
+
+                    <p>
+                        Follow the journey from stock search
+                        to market analysis.
+                    </p>
+
+                </div>
+
+
+                <div class="market-flowchart">
+
+
+                    <div class="flow-node">
+
+                        <div class="flow-icon">
+                            🔎
+                        </div>
+
+                        <h3>
+                            Search Stock
+                        </h3>
+
+                        <p>
+                            Enter a stock symbol
+                        </p>
+
+                    </div>
+
+
+                    <div class="flow-line">
+                        <span></span>
+                    </div>
+
+
+                    <div class="flow-node">
+
+                        <div class="flow-icon">
+                            🌐
+                        </div>
+
+                        <h3>
+                            Fetch API
+                        </h3>
+
+                        <p>
+                            Alphavantage retrieves data
+                        </p>
+
+                    </div>
+
+
+                    <div class="flow-line">
+                        <span></span>
+                    </div>
+
+
+                    <div class="flow-node">
+
+                        <div class="flow-icon">
+                            📊
+                        </div>
+
+                        <h3>
+                            Process Data
+                        </h3>
+
+                        <p>
+                            JavaScript analyzes JSON
+                        </p>
+
+                    </div>
+
+
+                    <div class="flow-line">
+                        <span></span>
+                    </div>
+
+
+                    <div class="flow-node">
+
+                        <div class="flow-icon">
+                            📈
+                        </div>
+
+                        <h3>
+                            Visualize
+                        </h3>
+
+                        <p>
+                            Chart.js creates graphs
+                        </p>
+
+                    </div>
+
+
+                    <div class="flow-line">
+                        <span></span>
+                    </div>
+
+
+                    <div class="flow-node">
+
+                        <div class="flow-icon">
+                            ⭐
+                        </div>
+
+                        <h3>
+                            Watchlist
+                        </h3>
+
+                        <p>
+                            Save stocks locally
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Animated Market Line -->
+
+                <div class="market-animation">
+
+                    <div class="market-line">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </div>
+
+                    <div class="market-label">
+                        MARKET DATA STREAM
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= WATCHLIST ================= -->
+
+            <section
+                id="watchlist"
+                class="watchlist premium-panel">
+
+                <div class="section-header left">
+
+                    <span class="section-label">
+                        PORTFOLIO TRACKER
+                    </span>
+
+                    <h2>
+                        ⭐ My Watchlist
+                    </h2>
+
+                    <p>
+                        Your saved stocks are stored securely
+                        in your browser using LocalStorage.
+                    </p>
+
+                </div>
+
+                <div id="watchlistContainer">
+
+                    <p class="empty-message">
+                        Your watchlist is empty.
+                        Search a stock and add it here.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================= ABOUT ================= -->
+
+            <section
+                id="about"
+                class="about premium-panel">
+
+                <div class="about-content">
+
+                    <div>
+
+                        <span class="section-label">
+                            ABOUT PROJECT
+                        </span>
+
+                        <h2>
+                            Stock Market Analyzer
+                        </h2>
+
+                        <p>
+                            Stock Market Analyzer is a frontend
+                            web application developed as an MCA
+                            academic project. The application
+                            fetches financial information from
+                            the Alphavantage API and presents it through
+                            an interactive dashboard.
+                        </p>
+
+                        <p>
+                            Users can search stocks, view market
+                            statistics, analyze historical prices,
+                            visualize trends and maintain a
+                            personal watchlist.
+                        </p>
+
+                    </div>
+
+
+                    <div class="project-features">
+
+                        <div>
+                            <span>01</span>
+                            Real-Time API
+                        </div>
+
+                        <div>
+                            <span>02</span>
+                            Interactive Charts
+                        </div>
+
+                        <div>
+                            <span>03</span>
+                            Local Watchlist
+                        </div>
+
+                        <div>
+                            <span>04</span>
+                            Responsive UI
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="technology-list">
+
+                    <span>HTML5</span>
+                    <span>CSS3</span>
+                    <span>JavaScript</span>
+                    <span>Alphavantage API</span>
+                    <span>Fetch API</span>
+                    <span>Chart.js</span>
+                    <span>LocalStorage</span>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="footer-logo">
+            ↗ StockAnalyzer
+        </div>
+
+        <p>
+            Frontend Stock Market Analyzer
+        </p>
+
+        <p>
+            MCA Academic Project • 2026
+        </p>
+
+    </footer>
+
+
+    <!-- ================= SCRIPT ================= -->
+
+    <script>
+
+        /*
+         * Quick stock search buttons
+         * Works with your existing searchStock()
+         * function from script.js
+         */
+
+        function quickSearch(symbol) {
+
+            document.getElementById("stockInput").value = symbol;
+
+            if (typeof searchStock === "function") {
+                searchStock(symbol);
+            } else {
+                document.getElementById("searchBtn").click();
+            }
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+    </script>
+
+    <script src="script.js"></script>
+
+<footer class="site-footer">
+    <div class="footer-content">
+        <h3>Stock Market Analyzer</h3>
+        <p class="footer-subtitle">Developed as a Group Project</p>
+
+        <div class="team-section">
+            <h4>Group Members</h4>
+            <div class="team-members">
+                <span>Sk Arif Hossain</span>
+                <span>Sipra Kundu</span>
+                <span>Mihir Roy</span>
+                <span>Puskar Mondal</span>
+                <span>Abesh Chandra Sarkar</span>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Stock Market Analyzer. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+
+
+</body>
+</html>
